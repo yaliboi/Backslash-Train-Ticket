@@ -67,3 +67,4 @@ for easier, faster, access and to prevent saving the same nodes twice, in the ma
 ```
 i'm going on the assumption that there are no circular refrences beacuse that would make checking if a route starts with or ends with impossible.
 as for the frontend, very simple filtering and visualising the graph using a library.
+once i finish all the filtering, all i have to do is reconvert the filtered object to a format that the front can handle, and its done!
