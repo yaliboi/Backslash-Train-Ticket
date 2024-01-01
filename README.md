@@ -16,7 +16,7 @@ lets do it with a post request with a generic json array like this:
 	{
 		"filterType": "STARTS_WITH",
 		"field": "publicExposed",
-		"value": true
+		"values": [true]
 	},
 	{
 		"filterType": "INCLUDES",
@@ -25,7 +25,7 @@ lets do it with a post request with a generic json array like this:
 	{
 		"filterType": "ENDS_WITH",
 		"field": "kind",
-		"values": ["sqs", "rds"] // if the "values" field is given, it will search for [value OR value]
+		"values": ["sqs", "rds"] // multiple values are given, it will search for [value OR value]
 	}
 ]
 ```
@@ -52,9 +52,11 @@ and can be done in multiple diffrent ways
 	frontend: [other object 1, other object 2]
 }
 ```
+something more like a tree view
 afterwards i will pass down a simple recursive function that will check itself for each one of the children to see if they meet the criteria, the starts with filter is only relevant to the first node,
 the includes is relavant to all nodes, and the ends with is only relevant to the last nodes, meaning all nodes who have no children. if a child of a node and it's children do not meet the critarea then it would 
-be removed from it's parent's children's list.
+be removed from it's parent's children's list. if i've already seen that a certain node does not fill the critareia it will be marked?
+this might not be the most efficent way, but with the time and knowlage i've got, i think its a good choice.
 for easier, faster, access and to prevent saving the same nodes twice, in the main object they will be saved with their name as the key value, and another object will be created to map them like this:
 ```
 {
@@ -68,3 +70,7 @@ for easier, faster, access and to prevent saving the same nodes twice, in the ma
 i'm going on the assumption that there are no circular refrences beacuse that would make checking if a route starts with or ends with impossible.
 as for the frontend, very simple filtering and visualising the graph using a library.
 once i finish all the filtering, all i have to do is reconvert the filtered object to a format that the front can handle, and its done!
+from the project requirments it seems like this needs to be in a single repository, so i'm doing it with turborepo, it has a lot of
+features but i'm mainly using it in order to run the front and the back at once, and to share common types.
+it seems like some of the edge's connections do not exist for example there is no such node as "assurance-service", so i will ignore
+them.
