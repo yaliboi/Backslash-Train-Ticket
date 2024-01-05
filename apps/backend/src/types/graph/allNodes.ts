@@ -10,7 +10,10 @@ export type AllNodesWithValidations = {
 
 export type NodeWithValidations = RawNode & {
     validations: {
-        includes?: boolean // will be if one of it's children or their children satisfies the includes filtering 
+        includes?: {
+            below: boolean // if this is true, then one if it's children satisfies the includes filtering, so we will pass it upwards
+            above: boolean // if this true, then one of it's parents satisfies the includes filtering, so we will pass it downwards but not upwards beacuse some of it's parents may not satisfy the includes filtering
+        }  
         endsWith?: boolean // will be true if one of it's final children satisfies the ends with filtering, all other children would be filtered out. 
         startsWith?: boolean // will be true if one of it's root parents satisfies the filtering
         //checkedEndsWith // will be true if its a bottom node or if all it's children already have this property as

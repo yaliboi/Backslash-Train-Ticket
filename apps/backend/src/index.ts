@@ -6,14 +6,15 @@ import router from './server/router';
 
 dotenv.config();
 const port = process.env.PORT || 3000;
-
+const allowOrigins = process.env.ALLOW_ORIGINS || 'http://localhost:8080'
 const app = express();
 
 app.use(cors())
 
 app.use(bodyParser.json())
+
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', process.env.ALLOW_ORIGINS);
+    res.header('Access-Control-Allow-Origin', allowOrigins);
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
