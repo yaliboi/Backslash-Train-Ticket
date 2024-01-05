@@ -19,5 +19,5 @@ export type FilterType = 'ENDS_WITH' | 'STARTS_WITH' | 'INCLUDES'
 export type FilterOption = {
     filterType: FilterType,
     field: string,
-    values?: string[]
+    values?: (string | boolean | number)[]
 }

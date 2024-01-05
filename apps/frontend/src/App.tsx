@@ -9,8 +9,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
             <Routes>
-                  <Route path="/graph" element={<GraphPage />} />
-                  <Route path="*" element={<div >oh man</div>} />
+                  <Route path="*" element={<GraphPage />} />
             </Routes>
         </BrowserRouter>
       </ QueryClientProvider>
