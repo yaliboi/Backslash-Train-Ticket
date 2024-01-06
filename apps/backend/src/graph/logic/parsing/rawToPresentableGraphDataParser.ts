@@ -1,6 +1,6 @@
 import { PresentableGraphData, PresentableNode } from "types";
-import { RawEdge, RawGraphData } from "../../types/graph/rawGraphData";
-import { getAllNodes } from "../../db/db";
+import { RawEdge, RawGraphData } from "../../../types/graph/rawGraphData";
+import { getAllNodes } from "../../../db/db";
 
 export const rawToPresentableGraphDataParser = (raw: RawGraphData): PresentableGraphData => {
     const parsedEdges = parseRawEdgesToPresentable(raw.edges)

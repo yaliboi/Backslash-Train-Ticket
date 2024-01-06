@@ -1,8 +1,8 @@
 import { FilterOption, PresentableEdge, PresentableGraphData, PresentableNode } from "types"
-import { parseRawEdgesToPresentable, rawToPresentableGraphDataParser } from "./rawToPresentableGraphDataParser"
+import { parseRawEdgesToPresentable, rawToPresentableGraphDataParser } from "./parsing/rawToPresentableGraphDataParser"
 import { isNodeValid } from "./isNodeValid"
 import { getAllNodes, getRawData } from "../../db/db"
-import { rawToValidEdges } from "./rawToValidEdges"
+import { rawToValidEdges } from "./parsing/rawToValidEdges"
 
 export const queryGraph = (filters: FilterOption[]) => {
     const raw = getRawData()
@@ -14,7 +14,6 @@ export const queryGraph = (filters: FilterOption[]) => {
     const includesFilters = filters.filter(f => f.filterType === 'INCLUDES')
 
     const nodesWithValidations = getAllNodes()
-
 
     Object.values(nodesWithValidations).forEach(node => {
         if(startsWithFilters.length > 0) nodesWithValidations[node.name].validations.startsWith = false
@@ -37,12 +36,11 @@ export const queryGraph = (filters: FilterOption[]) => {
             const isBottomNode = allBottomNodes.includes(currentNodeId)
             if(!currentNode.validations.checked){// if this node had already been validated then there is no need to validate again
                 currentNode.validations.checked = true
-                if(startsWithFilters.length > 0 && allTreeRoots.includes(currentNodeId)) //if there is starts with filtering and this is a starting node
-                {
+                
+                if(startsWithFilters.length > 0 && allTreeRoots.includes(currentNodeId)){ //if there is starts with filtering and this is a starting node
                     currentNode.validations.startsWith = isNodeValid(currentNode, startsWithFilters)
                 }    
                 
-
                 if(includesFilters.length > 0 && currentNode.validations.includes.above === false){
                     const valid = isNodeValid(currentNode, includesFilters)
                     currentNode.validations.includes.above = valid
@@ -51,7 +49,6 @@ export const queryGraph = (filters: FilterOption[]) => {
                 
                 if(endsWithFilters.length > 0 && currentNode.validations.endsWith === false && isBottomNode){
                     currentNode.validations.endsWith = isNodeValid(currentNode, endsWithFilters)
-
                 }
             }
                 
@@ -73,7 +70,7 @@ export const queryGraph = (filters: FilterOption[]) => {
         })
         layerNodes = Array.from(newLayerNodes.values())
     }
-    
+
     layerNodes = [...allBottomNodes]
 
     while(layerNodes.length > 0){ // we go back, updating the parents
@@ -82,11 +79,6 @@ export const queryGraph = (filters: FilterOption[]) => {
             const parents = edges.filter(edge => edge.to.includes(currentNodeId)).map(e => e.from)
             
             parents.forEach(parent => {
-                if(parent === 'food-service'){
-                    if(nodesWithValidations[currentNodeId].validations.endsWith === true){
-                        // console.log(nodesWithValidations[currentNodeId])
-                    }
-                }
                 //the parent may not know what the child knows about the route's includes and ends with validations, so the child notifies it
                 if(nodesWithValidations[parent].validations.includes && nodesWithValidations[parent].validations.includes.below === false) nodesWithValidations[parent].validations.includes.below = nodesWithValidations[currentNodeId].validations.includes.below
                 if(nodesWithValidations[parent].validations.endsWith === false) nodesWithValidations[parent].validations.endsWith = nodesWithValidations[currentNodeId].validations.endsWith

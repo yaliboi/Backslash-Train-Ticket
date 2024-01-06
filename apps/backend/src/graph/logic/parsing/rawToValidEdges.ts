@@ -1,5 +1,5 @@
-import { getAllNodes } from "../../db/db";
-import { RawEdge } from "../../types/graph/rawGraphData";
+import { getAllNodes } from "../../../db/db";
+import { RawEdge } from "../../../types/graph/rawGraphData";
 
 export const rawToValidEdges = (edges: RawEdge[]) => {
     const allNodes = getAllNodes()

@@ -1,5 +1,5 @@
-import { AllNodesWithValidations } from "../../types/graph/allNodes";
-import { RawGraphData } from "../../types/graph/rawGraphData";
+import { AllNodesWithValidations } from "../../../types/graph/allNodes";
+import { RawGraphData } from "../../../types/graph/rawGraphData";
 
 export const rawToAllNodes = (raw: RawGraphData): AllNodesWithValidations => {
     const allNodes = {}

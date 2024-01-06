@@ -1,4 +1,4 @@
-import { rawToAllNodes } from '../graph/logic/rawToAllNodes'
+import { rawToAllNodes } from '../graph/logic/parsing/rawToAllNodes'
 import { RawGraphData } from '../types/graph/rawGraphData'
 import raw from './train-ticket-fs.json'
 
