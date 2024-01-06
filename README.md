@@ -93,3 +93,5 @@ i had more time would be before updating a node's children (or parents if we are
 more node parents that haven't yet passed on their data to the node, and only after all the parents passed the data, then it will start
 passing the data downwards, doing this would essentialy make it so each node will passed only once when going forwards and once when
 going backwards.
+also could've presented more data in the frontend, such as which node satisfies which filters, and providing more node information in a
+modal when clicked
