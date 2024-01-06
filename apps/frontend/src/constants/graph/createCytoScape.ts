@@ -49,8 +49,3 @@ const defaultLayout = {
     // ready: undefined, // callback on layoutready
     // stop: undefined, // callback on layoutstop
 }
-
-
-
-// TO PREVENT GOING TO THE SAME PATHS TWICE, EACH TIME I KNOW IF A NODE IS SHIT, I WILL SAVE IT, SO THE NEXT TIME I LOOK AT IT, I WONT
-// HAVE TO GO THROUGH IT'S CHILDREN AGAIN.
