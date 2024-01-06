@@ -1,11 +1,12 @@
 // import { FrontGraphData } from 
 import styles from '../../../assets/custom-classes/graph.module.scss'
-import { SetStateAction, useEffect, useState } from 'react';
-import { Combinator, Field, Operator, QueryBuilder, RuleGroupType } from 'react-querybuilder';
+import { Combinator, Field, Operator, QueryBuilder, RuleGroupType, RuleType } from 'react-querybuilder';
 
 type Props = {
     setQuery: React.Dispatch<React.SetStateAction<RuleGroupType | undefined>>
 }
+
+const maxQueryLength = 5
 
 export const GraphFilter: React.FC<Props> = ({setQuery}) => {
     
@@ -39,17 +40,22 @@ export const GraphFilter: React.FC<Props> = ({setQuery}) => {
         {name: 'and', label: 'AND'}
     ]
 
-    // const [startsWithFilters, setStartsWithFilters] = useState(false)
-    // const [endsWithFilters, setEndsWithFilters] = useState(false)
-    // const [includesWithFilters, setIncludesFilters] = useState(false)
-
-
     const onQueryChange = (query: RuleGroupType) => {
         setQuery(query)
     }
 
+    const onAddRule = (rule: RuleType<string, string, any, string>, _parentPath: number[], query: RuleGroupType) => {
+        if(query.rules.length < maxQueryLength) return rule
+        alert(`Cannot have more then ${maxQueryLength} rules`)
+        return false
+    }
+
+    // const canAddRule = query ? query.rules.length <= maxQueryLength : true
+    
     return (<div className={styles['filters']}>
-            <QueryBuilder onQueryChange={onQueryChange} combinators={combinators} operators={operators} fields={fields}
-            controlClassnames={{addGroup: styles['hide'], combinators: styles['hide'], addRule: styles['add-rule']}}/>
+            <QueryBuilder onQueryChange={onQueryChange} onAddRule={onAddRule} combinators={combinators} operators={operators} fields={fields}
+            controlClassnames={{addGroup: styles['hide'], combinators: styles['hide'],
+            addRule: styles['add-rule']}} //LOOK ONLINE HOW TO DISABLE WHEN MAX 
+            />
     </ div>)
 }

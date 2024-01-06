@@ -1,7 +1,7 @@
 import { Graph } from "../components/graph/Graph"
 import styles from '../../assets/custom-classes/graph.module.scss'
 import { GraphFilter } from "../components/graph/GraphFilter"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { RuleGroupType } from "react-querybuilder"
 
 export const GraphPage: React.FC = () => {
@@ -12,7 +12,10 @@ export const GraphPage: React.FC = () => {
         <div className={styles['graph-header']}>
             Train Ticket Graph
         </div>
-        <GraphFilter setQuery={setQuery} />
-        <Graph query={query}/>
+        <div className={styles['graph-data-container']}>
+            <GraphFilter setQuery={setQuery} />
+            <Graph query={query}/>
+        </div>
+
     </ div>)
 }
