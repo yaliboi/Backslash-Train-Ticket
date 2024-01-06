@@ -62,12 +62,6 @@ export const queryGraph = (filters: FilterOption[]) => {
                     const children = [currentEdges.to].flat(1)
                 
                     children.forEach(child => {
-                        if(child === 'seat-service'){
-                            console.log('2')
-                        }
-                        if(child === 'travel-service'){
-                            console.log(nodesWithValidations[child].validations.includes)
-                        }
                         // child inherits current node's validations, only if they are true (beacuse its like an OR statement betwen this link and other links)
                         if(nodesWithValidations[child].validations.startsWith === false) nodesWithValidations[child].validations.startsWith = currentNode.validations.startsWith 
                         if(nodesWithValidations[child].validations.includes && nodesWithValidations[child].validations.includes.above === false) nodesWithValidations[child].validations.includes.above = currentNode.validations.includes.above 
@@ -79,7 +73,7 @@ export const queryGraph = (filters: FilterOption[]) => {
         })
         layerNodes = Array.from(newLayerNodes.values())
     }
-    console.log(nodesWithValidations['travel-service'])
+    
     layerNodes = [...allBottomNodes]
 
     while(layerNodes.length > 0){ // we go back, updating the parents
