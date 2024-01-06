@@ -5,7 +5,7 @@ import { FilterOption } from 'types';
 export const queryGraphController = async (req: Request, res: Response) => {
     const filters: FilterOption[] = req.body
 
-    //DO VALIDATION ON FILTERS
+    if(!Array.isArray(filters)) return res.status(400).json({msg: 'please send an array of filters'})
 
     const newGraph = queryGraph(filters);
 
