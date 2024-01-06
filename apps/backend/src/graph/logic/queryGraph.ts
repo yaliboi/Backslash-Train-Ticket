@@ -29,7 +29,7 @@ export const queryGraph = (filters: FilterOption[]) => {
     let layerNodes = [...allTreeRoots]
 
     //searching and updating layer by layer, until the final child knows everything about the route, then updating backwards layer by layer
-    while(layerNodes.length > 0){
+    while(layerNodes.length > 0){ //TODO: make this more efficent
         const newLayerNodes = new Set<string>() // preventing duplicate values
         layerNodes.forEach(currentNodeId => {
             const currentNode = nodesWithValidations[currentNodeId]

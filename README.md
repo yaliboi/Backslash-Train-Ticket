@@ -1,6 +1,16 @@
 # Backslash-Train-Ticket
 A home exercise from backslash, filtering and visualising a graph
 
+# How To Use
+```
+npm i
+```
+will install everything then
+```
+npm run dev
+```
+at the root directory will run both the front and the back, the front will run at localhost:8080. 
+
 # Filtering
 the provided json file basicly acts as the database, all we need to do is filter it, there is no need for an additional database (unless we want special graph databases, will be discussed soon).
 3 filters are requested - routes that START with a public service, rotues that END with Sink (rds/sql) and routes that INCLUDE
@@ -45,28 +55,20 @@ between diffrent fields and no OR in order to keep things simple and not overeng
 now that we have talked about the simple generic filtering, it's time to move to the fun part or rather the part that is the most debatable, complex
 and can be done in multiple diffrent ways
 1. using libraries and databases that specialise in this sort of graph information handling like graphql. it is a solid option, but in the task it is written "build a basic query engine on top of it" which could be interpeted as not using an already existing query engine, but could also be interpeted as implementing an existing query engine. either way, i think its more interesting if i create my own simple engine
-2. loading the data raw and running queries on it - this could work and it would save us the trouble of parsing the json data into another format and then parsing it back into it's original format which is already basicly good enough to send to the front end, however it would probably be difficult to filter the data in that format so thats why i think the next option is better.
-3. parsing the data into a format that is easier to filter through - for example objects inside objects like this:
-```
-{
-	frontend: [other object 1, other object 2]
-}
-```
-something more like a tree view
-afterwards i will pass down a simple recursive function that will check itself for each one of the children to see if they meet the criteria, the starts with filter is only relevant to the first node,
-the includes is relavant to all nodes, and the ends with is only relevant to the last nodes, meaning all nodes who have no children. if a child of a node and it's children do not meet the critarea then it would 
-be removed from it's parent's children's list. if i've already seen that a certain node does not fill the critareia it will be marked?
-this might not be the most efficent way, but with the time and knowlage i've got, i think its a good choice.
-for easier, faster, access and to prevent saving the same nodes twice, in the main object they will be saved with their name as the key value, and another object will be created to map them like this:
-```
-{
-	frontend: {
-		kind: "service",
-		language: "java", // now from the main object i can call frontend.kind if i wanna check if its a service or a database
-		...
-	}
-}
-```
+2. converting the data into a tree db or something similiar - not a good idea since this is a graph db
+3. what i decided to go with in the end, i call it the scan method. first we identify all the "tree roots" - meaning all the nodes
+that have no parents, and from them we go downwards, layer by layer we check if each node satisfies the filtering, if it does then it
+updates it's children's validations accordingly, meaning if validation startedWith = true for the first node, then all of it's children
+and their children will also have validation startedWith = true. basicly if a node has a validation true that means that somewhere in
+it's possible paths upwards or downwards, a node satisfies that validation. after we scanned through all the nodes and we got to the
+last nodes, the last nodes will know everything about their route from their parents, but their parents don't know what they know yet,
+so we go backwards layer by layer, the children update their parents. for INCLUDES validations, they have seperate properties for
+above and below, they will update upwards only what has below = true and downwards what has above = true, to prevent them from doing
+a zig zag pattern that will provide their parents with incorrect information, for example if a node's parent has INCLUDES = true,
+and another parent has it as false, it shall not update the other parent with INCLUDE = true. at the end after we scanned forwards and 
+backwards, all nodes know all information about all their possible routes, so all thats left is to remove irelevant nodes, and edges,
+and thats it, we got our final filtered data that we return to the front.
+
 i'm going on the assumption that there are no circular refrences beacuse that would make checking if a route starts with or ends with impossible.
 as for the frontend, very simple filtering and visualising the graph using a library.
 once i finish all the filtering, all i have to do is reconvert the filtered object to a format that the front can handle, and its done!
@@ -74,3 +76,20 @@ from the project requirments it seems like this needs to be in a single reposito
 features but i'm mainly using it in order to run the front and the back at once, and to share common types.
 it seems like some of the edge's connections do not exist for example there is no such node as "assurance-service", so i will ignore
 them.
+
+# Problems And The Future
+there are a few problems with what i did, first of all the way the filtering works is a bit problematic beacuse it's not designed in a
+way that is convinient for implementation of OR rules, for example each node has startsWith = true or false, which checks all the 
+startswith validations for that node, in order for more complex quering to occur i should've provided startsWith and all the other node 
+validations an array of validations, and in the end i would check their AND, OR logic. this would've also solved another big problem
+i have - the INCLUDES validation dosn't work as expected with more then 1 INCLUDES Filters beacuse it checks for both INCLUDES 
+validations on the same node insted of for each node seperatly, had i planned this better or had more time this would've been solved.
+the final problem is with the quering method itself, i didn't have enough time to make it as efficent as possible, altough i think
+its kinda good, low complexity and runs within less then 5ms on my pc (altough on a small dataset) as it is right now, it can be a
+lot more efficent, i have some calls to arrays that could be prevented with better mapping, and the main problem with my current method
+is checking the same nodes twice, for example if one node's child is another node's grandchild then the beacuse the code goes layer by 
+layer, it will check that node and it's children twice leading to greater then o(n) complexity. the solution i would've implemented if
+i had more time would be before updating a node's children (or parents if we are going backwards), the code would check if there are
+more node parents that haven't yet passed on their data to the node, and only after all the parents passed the data, then it will start
+passing the data downwards, doing this would essentialy make it so each node will passed only once when going forwards and once when
+going backwards.
