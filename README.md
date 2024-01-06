@@ -11,6 +11,8 @@ npm run dev
 ```
 at the root directory will run both the front and the back, the front will run at localhost:8080. 
 
+![alt text](https://raw.githubusercontent.com/yaliboi/Backslash-Train-Ticket/main/apps/frontend/assets/images/Presentation.PNG)
+
 # Filtering
 the provided json file basicly acts as the database, all we need to do is filter it, there is no need for an additional database (unless we want special graph databases, will be discussed soon).
 3 filters are requested - routes that START with a public service, rotues that END with Sink (rds/sql) and routes that INCLUDE
